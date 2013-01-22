@@ -10,19 +10,16 @@
 </head>
 <body>
   <div id="map_canvas" style="width:100%; height:100%"></div>
-
-  <!-- templates -->
-  <!--
-      <script id="infowindow-template" type="text/x-handlebars-template">
-        <h2>{{hotelName}}</h2>
-        <img src="{{hotelThumbnailUrl}}" />
-      </script>
-      -->
 </body>
 
 <template name="infowindow">
   <div class="info">
-    <h2>{{hotelName}}</h2>
-    <img src="{{hotelThumbnailUrl}}" />
+    <h2><a href="{{hotelInformationUrl}}">{{hotelName}}</a></h2>
+    <div class="detail">
+      <img src="{{hotelThumbnailUrl}}" />
+      <div>{{address2}}</div>
+      <div><a href="tel:{{telephoneNo}}">{{telephoneNo}}</a></div>
+      <div>￥{{hotelMinCharge}}〜</div>
+    <div>
   </div>
 </template>

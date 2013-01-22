@@ -1,3 +1,7 @@
+/**
+ *   Room Available
+ *   Copyright (C) 2013 ogaoga.org
+ */
 if (Meteor.isClient) {
 
   var gMap;
