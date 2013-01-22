@@ -13,17 +13,42 @@ if (Meteor.isClient) {
                                myOptions);
   };
 
+  var currentInfoWindow;
+  var popupInfoWindow = function(info) {
+    var latLng = new google.maps.LatLng(info.latitude, 
+                                        info.longitude);
+    var image = new google.maps.MarkerImage(
+      info.hotelThumbnailUrl,
+      new google.maps.Size(48.0, 48.0)
+      // new google.maps.Point(0,0),
+      // new google.maps.Point(0,64.0)
+    );
+    var marker = new google.maps.Marker({
+      position: latLng, 
+      map: gMap,
+      title: info.hotelName,
+      info: info,
+      //icon: image,
+    });
+    google.maps.event.addListener(marker, 'click', function(event) {
+      if ( currentInfoWindow ) { 
+          currentInfoWindow.close();
+      }
+      var html     = Template.infowindow(info);
+      currentInfoWindow = new google.maps.InfoWindow({
+        content: html,
+      });
+      currentInfoWindow.open(gMap, marker);
+    });
+  };
+
   var plotHotels = function(d) {
     var hotels = d.Body.hotel;
     for ( var i = 0, len = hotels.length ; i < len ; i++ ) {
       var hotelBasicInfo = hotels[i].hotelInfo[0].hotelBasicInfo;
       var latLng = new google.maps.LatLng(hotelBasicInfo.latitude, 
                                           hotelBasicInfo.longitude);
-      var marker = new google.maps.Marker({
-        position: latLng, 
-        map: gMap,
-        title: hotelBasicInfo.hotelName
-      });   
+      popupInfoWindow(hotelBasicInfo);
     }
   }
 
@@ -61,18 +86,6 @@ if (Meteor.isClient) {
       },
     });
   }
-
-  Template.hello.greeting = function () {
-    return "Welcome to room-available.";
-  };
-
-  Template.hello.events({
-    'click input' : function() {
-      // template data, if any, is available in 'this'
-      if (typeof console !== 'undefined')
-        console.log("You pressed the button");
-    }
-  });
 
   //
   Meteor.startup(function() {
