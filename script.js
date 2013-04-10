@@ -56,22 +56,28 @@ if (Meteor.isClient) {
     }
   }
 
+  var makeDateString = function(day) {
+    var dayMonth = day.getMonth()+1;
+    dayMonth = (dayMonth < 10) ? '0'+dayMonth : dayMonth;
+    var dayDate = day.getDate();
+    dayDate = (dayDate < 10) ? '0'+dayDate : dayDate;
+    return day.getFullYear() + '-' + dayMonth + '-' + dayDate;
+  }
+
   var queryRooms = function(position) {
     var today = new Date();
-    var todayString = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+    var todayString = makeDateString(today);
     var tomorrow = new Date();
     tomorrow.setTime(today.getTime() + 86400000);
-    var tomorrowString = tomorrow.getFullYear() + '-' + (tomorrow.getMonth()+1) + '-' + tomorrow.getDate();
+    var tomorrowString = makeDateString(tomorrow);
     var url = 'http://api.rakuten.co.jp/rws/3.0/json';
     var params = {
       developerId: '1068117367232104228',
       affiliateId: '0fd292a6.ef3ce835.0fd292a7.a4c3c04e',
       operation: 'VacantHotelSearch',
       version: '2009-10-20',
-      //checkinDate: todayString,
-      checkinDate: '2013-01-22',
-      //checkoutDate: tomorrowString,
-      checkoutDate: '2013-01-23',
+      checkinDate: todayString,
+      checkoutDate: tomorrowString,
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
       datumType: 1,
